@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Todoリスト</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+
+
+<body class="bg-info bg-gradient">
+    <div class="container py-5">
+
+
+        <h1 class="mb-4 text-center">Todoリスト</h1>
+
+        <form id="taskForm" action="{{ url_for('add') }}" method="post" class="d-flex mb-4">
+            <textarea id="taskInput" name="task" class="form-control me-2" placeholder="タスクを入力"></textarea>
+            <button type="submit" class="btn btn-danger">追加</button>
+        </form>
+        <script>
+        document.getElementById("taskInput").addEventListener("keydown",function(e){
+            if(e.key === "Enter" && !e.shiftKey){
+                e.preventDefault();
+                document.getElementById("taskForm").submit();
+            }
+        })
+        </script>
+
+
+
+        <audio id="sound-complete" src="{{ url_for('static',filename='complete.mp3') }}"></audio>
+        <audio id="sound-uncomplete" src="{{ url_for('static',filename='uncomplete.mp3') }}"></audio>
+
+        <ul class="list-group">
+            {% for todo in todos %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="d-flex align-items-start flex-grow-1">
+                        <form action="{{ url_for('toggle', task_id=todo[0]) }}" method="post" style="display:inline;">
+                            <input type="checkbox" 
+                                style="width: 24px; height: 24px;"
+                                onchange="playCheckSound(this); this.form.submit();"
+                                {% if todo[2] == 1 %}checked{% endif %}>
+                        </form>
+                        {% if todo[2] == 1 %}
+                            <s class="ms-2 text-muted">{{ todo[1] }}</s>
+                        {% else %}
+                            <span class="ms-2">{{ todo[1] }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="actions d-inline-flex align-items-center gap-2 align-self-center flex-shrink-0">
+                        <a href="{{ url_for('edit', task_id=todo[0]) }}" class="btn btn-sm btn-info">編集</a>
+                        <a href="{{ url_for('delete', task_id=todo[0]) }}" class="btn btn-sm btn-warning">削除</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+    function playCheckSound(checkbox) {
+        let soundId = checkbox.checked ? "sound-complete" : "sound-uncomplete";
+        const original = document.getElementById(soundId);
+        const clone = original.cloneNode(true);  // trueで中身もコピー
+        document.body.appendChild(clone);        // DOMに追加
+        clone.play();
+        clone.addEventListener("ended", () => clone.remove()); // 再生後に削除
+    }
+    </script>
+    <style>
+        /* actions 内のボタンが縦に伸びないように保険で高さを固定 */
+        .actions .btn { height: auto; padding-top: .25rem; padding-bottom: .25rem; }
+    </style>
+
+</body>
+</html>
