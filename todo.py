@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+import os
 
 app = Flask(__name__)
 DB_NAME = "todo.db"
@@ -104,7 +105,9 @@ def toggle(task_id):
     return redirect(url_for("index"))
 
 
+# --- アプリ起動時に必ずDBを初期化 ---
 init_db()
 
-if __name__ == "__main__":    
-    app.run(debug=True, host="0.0.0.0", port=8000)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # RenderではPORTが自動設定される
+    app.run(debug=True, host="0.0.0.0", port=port)
