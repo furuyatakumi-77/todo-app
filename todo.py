@@ -104,8 +104,7 @@ def toggle(task_id):
     return redirect(url_for("index"))
 
 
+init_db()
 
-
-if __name__ == "__main__":
-    init_db()
+if __name__ == "__main__":    
     app.run(debug=True, host="0.0.0.0", port=8000)
