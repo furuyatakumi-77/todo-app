@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">📕 新しい本を追加</h2>
+    <form method="POST" class="card p-4 shadow-sm">
+        
+        <div class="mb-3">
+            <label class="form-label">タイトル</label>
+            <input type="text" name="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">著者</label>
+            <input type="text" name="author" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">出版社</label>
+            <input type="text" name="publisher" class="form-control" required>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">値段</label>
+                <input type="number" name="price" class="form-control" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">種類</label>
+                <input type="text" name="genre" class="form-control">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">入手ルート</label>
+                <select name="source" class="form-select">
+                    <option value="本屋">本屋</option>
+                    <option value="図書館">図書館</option>
+                    <option value="電子書籍">電子書籍</option>
+                    <option value="その他">その他</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">読了日</label>
+                <input type="date" name="read_date" class="form-control">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">点数</label>
+            <input type="number" name="rating" min="0" max="10" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">要約</label>
+            <textarea name="summary" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">感想</label>
+            <textarea name="review" class="form-control" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">➕ 追加</button>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">← キャンセル</a>
+    </form>
+</div>
+{% endblock %}
+

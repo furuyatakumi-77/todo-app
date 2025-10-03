@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 h2 class="mb-3">知見一覧</h2>
+
+    {% if insights %}
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+            {% for insight in insights %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <p class="card-text">{{ insight.content }}</p>
+                        <a href="{{ url_for('detail', book_id=insight.book.id) }}" class="card-link">
+                            📚 {{ insight.book.title }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">知見はまだありません</div>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}">← 一覧に戻る</a>
+</div>
+{% endblock %}

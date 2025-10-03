@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">本の詳細・編集</h2>
+
+<div id="view-mode" class="card p-4 mb-4">
+    <h4 class="card-title">{{ book.title }}</h4>
+    <ul class="list-group list-group-flush mb-3">
+        <li class="list-group-item"><strong>著者:</strong> {{ book.author }}</li>
+        <li class="list-group-item"><strong>出版社:</strong> {{ book.publisher or '' }}</li>
+        <li class="list-group-item"><strong>種類:</strong> {{ book.genre or '' }}</li>
+        <li class="list-group-item"><strong>読了日:</strong> {{ book.read_date.strftime('%Y-%m-%d') if book.read_date }}</li>
+        <li class="list-group-item"><strong>値段:</strong> {{ book.price or '' }}</li>
+        <li class="list-group-item"><strong>入手ルート:</strong> {{ book.source or '' }}</li>
+        <li class="list-group-item"><strong>点数:</strong> {{ book.rating or '' }}</li>
+        <li class="list-group-item"><strong>要約:</strong> {{ book.summary or '' }}</li>
+        <li class="list-group-item"><strong>感想:</strong> {{ book.review or '' }}</li>
+    </ul>
+
+    <h6>知見</h6>
+    <ul class="list-group mb-3">
+        {% for insight in book.insights %}
+            <li class="list-group-item">{{ insight.content }}</li>
+        {% else %}
+            <li class="list-group-item text-muted">まだ知見はありません</li>
+        {% endfor %}
+    </ul>
+
+    <h6>語彙</h6>
+    <table class="table table-bordered table-sm mb-3">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 20%;">単語</th>
+                <th style="width: 80%;">意味</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vocab in book.vocabularies %}
+                <tr>
+                    <td>{{ vocab.word }}</td>
+                    <td style="white-space: normal; word-break: break-word;">
+                        {{ vocab.meaning }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="2" class="text-muted">まだ語彙はありません</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button class="btn btn-outline-secondary" onclick="toggleEdit()">✏️ 編集モード</button>
+    <form action="{{ url_for('delete', book_id=book.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('削除しますか？');">
+        <button type="submit" class="btn btn-outline-danger">🗑️ 削除</button>
+    </form>
+</div>
+
+
+
+<div id="edit-mode" class="card p-4" style="display:none;">
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">タイトル</label>
+            <input type="text" name="title" class="form-control" value="{{ book.title }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">著者</label>
+            <input type="text" name="author" class="form-control" value="{{ book.author }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">出版社</label>
+            <input type="text" name="publisher" class="form-control" value="{{ book.publisher or '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">種類</label>
+            <input type="text" name="genre" class="form-control" value="{{ book.genre or '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">読了日</label>
+            <input type="date" name="read_date" class="form-control" value="{{ book.read_date.strftime('%Y-%m-%d') if book.read_date else '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">値段</label>
+            <input type="number" name="price" class="form-control" value="{{ book.price or '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">入手ルート</label>
+            <input type="text" name="source" class="form-control" value="{{ book.source or '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">要約</label>
+            <textarea name="summary" class="form-control">{{ book.summary or '' }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">点数</label>
+            <input type="number" name="rating" class="form-control" min="0" max="10" value="{{ book.rating or '' }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">感想</label>
+            <textarea name="review" class="form-control">{{ book.review or '' }}</textarea>
+        </div>
+
+
+        <div class="mb-3">
+            <h5>知見（編集）</h5>
+            <textarea name="insights_text" class="form-control" rows="5" cols="50">{% for insight in book.insights %}{{ insight.content }}\n{% endfor %}</textarea><br>
+            <small>※1行＝1つの知見として保存</small>
+        </div>
+        <div class="mb-3">
+            <h5>語彙（編集）</h5>
+            <textarea name="vocab_text" class="form-control" rows="5" cols="50">{% for vocab in book.vocabularies %}{{ vocab.word }} : {{ vocab.meaning }}\n{% endfor %}</textarea><br>
+            <small>※「単語 : 意味」の形式で1行ずつ入力</small>
+        </div>
+        <button type="submit" class="btn btn-primary">保存</button>
+        <button type="button" class="btn btn-secondary" onclick="toggleEdit()">キャンセル</button>
+    </form>
+</div>
+
+<hr>
+<form action="{{ url_for('delete',book_id=book.id) }}" method="POST" style="display: inline;">
+    <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+</form>
+
+
+<br>
+<a href="{{ url_for('index')}}">← 一覧に戻る</a>
+
+<script>
+function toggleEdit(){
+     document.getElementById("view-mode").style.display =
+        document.getElementById("view-mode").style.display === "none" ? "block" : "none";
+    document.getElementById("edit-mode").style.display =
+        document.getElementById("edit-mode").style.display === "none" ? "block" : "none";
+}
+</script>
+{% endblock %}

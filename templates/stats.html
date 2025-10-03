@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">📊 読書統計</h2>
+
+    <!-- 概要カード -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">📚 読んだ本の総数</h5>
+                    <p class="display-6 fw-bold text-primary">{{ total_books }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">💴 これまでの費用合計</h5>
+                    <p class="display-6 fw-bold text-success">{{ "{:,}".format(total_cost or 0) }} 円</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 月別の統計 -->
+    <h4 class="mb-3">📅 月別の読書と費用</h4>
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>年月</th>
+                <th>読んだ冊数</th>
+                <th>費用合計</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in monthly_stats %}
+            <tr>
+                <td>{{ row.year }}年{{ row.month }}月</td>
+                <td>{{ row.count }}</td>
+                <td>{{ "{:,}".format(row.total_cost or 0) }} 円</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" class="text-center text-muted">データがありません</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">← 一覧に戻る</a>
+</div>
+{% endblock %}

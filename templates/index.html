@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">読んだ本リスト</h2>
+<ul>
+    <form method="GET" action="{{ url_for('index')}}" class="row g-2 mb-4">
+        <div class="col-md-6">
+            <input type="text" name="p" placeholder="タイトルや著書で検索" value="{{ query or ''}}">
+        </div>
+        <div class="col-md-3">
+            <select name="sort">
+                <option value="date_desc"{% if sort == "date_desc" %}selected{% endif %}>読了日（新しい順）</option>
+                <option value="date_desc"{% if sort == "date_asc" %}selected{% endif %}>読了日（古い順）</option>
+                <option value="price_desc"{% if sort == "price_desc" %}selected{% endif %}>値段（安い順）</option>
+                <option value="price_desc"{% if sort == "price_asc" %}selected{% endif %}>値段（高い順）</option>
+                <option value="date_desc"{% if sort == "date_desc" %}selected{% endif %}>読了日（新しい順）</option>
+                <option value="date_desc"{% if sort == "date_desc" %}selected{% endif %}>読了日（新しい順）</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit">検索・ソート</button>
+        </div>
+    </form>
+
+{% if books %}
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>タイトル</th>
+            <th>著者</th>
+            <th>出版社</th>
+            <th>種類</th>
+            <th>読了日</th>    
+        </tr>           
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td><a href="{{ url_for('detail', book_id=book.id)}}" class="text-decoration-none">{{ book.title }}</a></td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.publisher or "" }}</td>
+            <td>{{ book.genre or "" }}</td>
+            <td>{{ book.read_date.strftime('%Y-%m-%d') if book.read_date else "" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<tr>
+    <td colspan="6" class="text-center text-muted">まだ本が登録されていません</td>
+ </tr>
+{% endif %}
+{% endblock %}
