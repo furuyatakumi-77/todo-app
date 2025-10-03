@@ -3,17 +3,17 @@
 <h2 class="mb-4">本の詳細・編集</h2>
 
 <div id="view-mode" class="card p-4 mb-4">
-    <h4 class="card-title">{{ book.title }}</h4>
+    <h4 class="card-title">{{ book.title | replace('\n', '<br>') | safe }}</h4>
     <ul class="list-group list-group-flush mb-3">
-        <li class="list-group-item"><strong>著者:</strong> {{ book.author }}</li>
+        <li class="list-group-item"><strong>著者:</strong> {{ book.author | replace('\n', '<br>') | safe }}</li>
         <li class="list-group-item"><strong>出版社:</strong> {{ book.publisher or '' }}</li>
         <li class="list-group-item"><strong>種類:</strong> {{ book.genre or '' }}</li>
         <li class="list-group-item"><strong>読了日:</strong> {{ book.read_date.strftime('%Y-%m-%d') if book.read_date }}</li>
         <li class="list-group-item"><strong>値段:</strong> {{ book.price or '' }}</li>
         <li class="list-group-item"><strong>入手ルート:</strong> {{ book.source or '' }}</li>
         <li class="list-group-item"><strong>点数:</strong> {{ book.rating or '' }}</li>
-        <li class="list-group-item"><strong>要約:</strong> {{ book.summary or '' }}</li>
-        <li class="list-group-item"><strong>感想:</strong> {{ book.review or '' }}</li>
+        <li class="list-group-item"><strong>要約:</strong> {{ book.summary | replace('\n', '<br>') | safe }}</li>
+        <li class="list-group-item"><strong>感想:</strong> {{ book.review | replace('\n', '<br>') | safe }}</li>
     </ul>
 
     <h6>知見</h6>
@@ -58,12 +58,10 @@
 <div id="edit-mode" class="card p-4" style="display:none;">
     <form method="POST">
         <div class="mb-3">
-            <label class="form-label">タイトル</label>
-            <input type="text" name="title" class="form-control" value="{{ book.title }}">
+            <label class="form-label">タイトル: <textarea name="title" rows="2" class="form-control">{{ book.title }}</textarea></label>
         </div>
         <div class="mb-3">
-            <label class="form-label">著者</label>
-            <input type="text" name="author" class="form-control" value="{{ book.author }}">
+            <label class="form-label">著者:<textarea name="author" rows="2" class="form-control">{{ book.author }}</textarea></label>
         </div>
         <div class="mb-3">
             <label class="form-label">出版社</label>
@@ -101,12 +99,14 @@
 
         <div class="mb-3">
             <h5>知見（編集）</h5>
-            <textarea name="insights_text" class="form-control" rows="5" cols="50">{% for insight in book.insights %}{{ insight.content }}\n{% endfor %}</textarea><br>
+            <textarea name="insights_text" class="form-control" rows="5" cols="50">{% for insight in book.insights %}{{ insight.content }}
+{% endfor %}</textarea><br>
             <small>※1行＝1つの知見として保存</small>
         </div>
         <div class="mb-3">
             <h5>語彙（編集）</h5>
-            <textarea name="vocab_text" class="form-control" rows="5" cols="50">{% for vocab in book.vocabularies %}{{ vocab.word }} : {{ vocab.meaning }}\n{% endfor %}</textarea><br>
+            <textarea name="vocab_text" class="form-control" rows="5" cols="50">{% for vocab in book.vocabularies %}{{ vocab.word }} : {{ vocab.meaning }}
+{% endfor %}</textarea><br>
             <small>※「単語 : 意味」の形式で1行ずつ入力</small>
         </div>
         <button type="submit" class="btn btn-primary">保存</button>

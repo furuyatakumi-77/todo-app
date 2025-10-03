@@ -35,8 +35,12 @@
     <tbody>
         {% for book in books %}
         <tr>
-            <td><a href="{{ url_for('detail', book_id=book.id)}}" class="text-decoration-none">{{ book.title }}</a></td>
-            <td>{{ book.author }}</td>
+            <td>
+                <a href="{{ url_for('detail', book_id=book.id)}}" class="text-decoration-none">
+                    {{ book.title | replace('\n', '<br>') | safe }}
+                </a>
+            </td>
+            <td>{{ book.author | replace('\n', '<br>') | safe }}</td>
             <td>{{ book.publisher or "" }}</td>
             <td>{{ book.genre or "" }}</td>
             <td>{{ book.read_date.strftime('%Y-%m-%d') if book.read_date else "" }}</td>
