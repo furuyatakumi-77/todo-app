@@ -94,7 +94,7 @@ def add():
         publisher = request.form["publisher"]
         price = request.form["price"]
         source = request.form["source"]
-        summary = summary.form["summary"]
+        summary = request.form["summary"]
         review = request.form["review"]
         rating = request.form["rating"]
         genre = request.form["genre"]
