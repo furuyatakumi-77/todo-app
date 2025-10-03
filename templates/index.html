@@ -9,11 +9,11 @@
         <div class="col-md-3">
             <select name="sort">
                 <option value="date_desc"{% if sort == "date_desc" %}selected{% endif %}>読了日（新しい順）</option>
-                <option value="date_desc"{% if sort == "date_asc" %}selected{% endif %}>読了日（古い順）</option>
-                <option value="price_desc"{% if sort == "price_desc" %}selected{% endif %}>値段（安い順）</option>
-                <option value="price_desc"{% if sort == "price_asc" %}selected{% endif %}>値段（高い順）</option>
-                <option value="date_desc"{% if sort == "date_desc" %}selected{% endif %}>読了日（新しい順）</option>
-                <option value="date_desc"{% if sort == "date_desc" %}selected{% endif %}>読了日（新しい順）</option>
+                <option value="date_asc"{% if sort == "date_asc" %}selected{% endif %}>読了日（古い順）</option>
+                <option value="price_desc"{% if sort == "price_desc" %}selected{% endif %}>値段（高い順）</option>
+                <option value="price_asc"{% if sort == "price_asc" %}selected{% endif %}>値段（安い順）</option>
+                <option value="rating_desc"{% if sort == "rating_desc" %}selected{% endif %}>点数（高い順）</option>
+                <option value="rating_asc"{% if sort == "rating_asc" %}selected{% endif %}>点数（低い順）</option>
             </select>
         </div>
         <div class="col-md-3">
