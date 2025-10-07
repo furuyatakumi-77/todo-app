@@ -2,19 +2,27 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>本管理アプリ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   
 
 </head>
 <body class="container my-4">
-    <h1 class="mb-4">📚 本管理アプリ</h1>
-    <a class="btn btn-primary btn-sm"  href="{{ url_for('index') }}">一覧</a> | 
-    <a class="btn btn-success btn-sm" href="{{ url_for('add') }}">新しい本を追加</a>
-    <a class="btn btn-info btn-sm" href="{{ url_for('insights') }}">知見一覧</a> | 
-    <a class="btn btn-warning btn-sm" href="{{ url_for('vocabularies') }}">語彙一覧</a>
-    <a class="btn btn-secondary btn-sm" href="{{ url_for('stats') }}">📊 統計</a>
+    <h1 class="mb-4 text-center">📚 本管理アプリ</h1>
+
+    <!-- ✅ ボタンを中央寄せ＆折り返し可能に -->
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+        <a class="btn btn-primary btn-sm" href="{{ url_for('index') }}">一覧</a>
+        <a class="btn btn-success btn-sm" href="{{ url_for('add') }}">新しい本を追加</a>
+        <a class="btn btn-info btn-sm" href="{{ url_for('insights') }}">知見一覧</a>
+        <a class="btn btn-warning btn-sm" href="{{ url_for('vocabularies') }}">語彙一覧</a>
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('stats') }}">📊 統計</a>
+    </div>
+
     <hr>
+
     {% block content %}{% endblock %}
 </body>
 </html>

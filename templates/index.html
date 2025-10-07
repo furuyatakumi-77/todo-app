@@ -22,32 +22,34 @@
     </form>
 
 {% if books %}
-<table class="table table-striped table-hover table-bordered table-sm align-middle text-wrap">
-    <thead class="table-dark">
-        <tr>
-            <th>タイトル</th>
-            <th>著者</th>
-            <th>出版社</th>
-            <th>種類</th>
-            <th>読了日</th>    
-        </tr>           
-    </thead>
-    <tbody>
-        {% for book in books %}
-        <tr>
-            <td>
-                <a href="{{ url_for('detail', book_id=book.id)}}" class="text-decoration-none">
-                    {{ book.title | replace('\n', '<br>') | safe }}
-                </a>
-            </td>
-            <td>{{ book.author | replace('\n', '<br>') | safe }}</td>
-            <td>{{ book.publisher or "" }}</td>
-            <td>{{ book.genre or "" }}</td>
-            <td>{{ book.read_date.strftime('%Y-%m-%d') if book.read_date else "" }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered table-sm align-middle text-wrap">
+        <thead class="table-dark">
+            <tr>
+                <th>タイトル</th>
+                <th>著者</th>
+                <th>出版社</th>
+                <th>種類</th>
+                <th>読了日</th>    
+            </tr>           
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('detail', book_id=book.id)}}" class="text-decoration-none">
+                        {{ book.title | replace('\n', '<br>') | safe }}
+                    </a>
+                </td>
+                <td>{{ book.author | replace('\n', '<br>') | safe }}</td>
+                <td>{{ book.publisher or "" }}</td>
+                <td>{{ book.genre or "" }}</td>
+                <td>{{ book.read_date.strftime('%Y-%m-%d') if book.read_date else "" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% else %}
 <tr>
     <td colspan="6" class="text-center text-muted">まだ本が登録されていません</td>
