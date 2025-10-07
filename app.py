@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy import func
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://bookapp_db_70xh_user:U8QHRZVaIAxe7fSzZtYsxOVEOcluTV8s@dpg-d3i8s43e5dus738u1nn0-a/bookapp_db_70xh"
@@ -196,28 +197,37 @@ def vocabularies():
     return render_template("vocabularies.html", vocabularies=vocabularies)
 
 
+# 統計データ
 
-#統計データ
+
 @app.route("/stats")
 def stats():
-    #総数と合計費用
+    # 総数と合計費用
     total_books = Book.query.count()
-    total_cost = db.session.query(db.func.sum(Book.price)).scalar() or 0
+    total_cost = db.session.query(func.sum(Book.price)).scalar() or 0
 
-    #月別の集計
+    # 月別の集計（PostgreSQL対応）
     monthly_data = (
         db.session.query(
-            db.func.strftime("%Y-%m",Book.read_date).label("month"),
-            db.func.count(Book.id),
-            db.func.sum(Book.price)
+            func.to_char(Book.read_date, 'YYYY-MM').label("month"),
+            func.count(Book.id),
+            func.sum(Book.price)
         )
         .group_by("month")
         .order_by("month")
         .all()
     )
 
-    return render_template("stats.html",total_books=total_books,total_cost=total_cost,monthly_data=monthly_data)
+    return render_template(
+        "stats.html",
+        total_books=total_books,
+        total_cost=total_cost,
+        monthly_data=monthly_data
+    )
 
 
+# 一時的に PostgreSQL のテーブルを初期化するコード
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()  # ← Render上のPostgreSQLにBookなどのテーブルを作成
     app.run(debug=True)
